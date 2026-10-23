@@ -1,0 +1,66 @@
+# Maven output and compiled artifacts
+/target/
+**/target/
+/.maven-cache/
+/build/
+/out/
+*.class
+*.jar
+*.war
+*.ear
+
+# Local application configuration and secrets
+config.properties
+*.local.properties
+*.properties.local
+.env
+.env.*
+!.env.example
+
+# Local databases, backups, and dumps (keep SQL schema/migrations under src/main/resources/db)
+/data/
+**/data/
+*.mv.db
+*.trace.db
+*.lock.db
+*.sqlite
+*.sqlite3
+*.db
+*.bak
+*.backup
+*.dump
+*.sql.gz
+
+# Local logs and rendered previews
+/logs/
+**/logs/
+*.log
+/.ui-preview/
+/screenshots/
+**/screenshots/
+
+# Machine-specific IDE and editor state
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+nbproject/private/
+
+# Temporary/private Maven settings
+/maven-settings*.xml
+**/maven-settings*.xml
+/settings-local.xml
+/settings-private.xml
+
+# OS and editor temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.swp
+*.swo
+*~

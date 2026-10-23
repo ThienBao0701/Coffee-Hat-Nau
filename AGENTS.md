@@ -1,0 +1,12 @@
+# Working guide for Cafe Management
+
+- This is `vn.cafe:cafe-management`, a Java 17 Maven Swing desktop app. Read [`docs/PROJECT_GUIDE.md`](docs/PROJECT_GUIDE.md) before significant changes and use [`docs/CODE_MAP.md`](docs/CODE_MAP.md) to find the owning layer.
+- Keep the current direction: Swing views in `cafe.view` call services; services enforce rules/permissions and call JDBC DAOs; DAOs use `Jdbc` and prepared statements. Do not put SQL or business rules in views.
+- Keep DB edits in `src/main/resources/db/schema.sql` and, when needed, `seed-demo.sql`; `Database.initializeIfEmpty` only initializes an empty DB and is not a migration system. Never reset, drop, or recreate a user's database. Treat partial initialization and MySQL DDL behavior carefully; validate additive schema changes against isolated H2 and MySQL databases.
+- Put multi-row business operations in one `Database.tx`; it commits on success and rolls back SQL/runtime failures. Lock invoice/table/ingredient rows using existing DAO methods and preserve consistent lock order and conditional status updates.
+- Put every sensitive service operation behind `Session.require(Permission...)`; navigation visibility in `MainFrame` is only a UI hint. Keep password hashes out of `NhanVien`, mask customer IDs for employees, and never log or document credentials or personal data.
+- Preserve monetary rules in `Money` and `PriceCalculator` (`BigDecimal`, whole-VND `HALF_UP` at calculation steps); invoice snapshots are historical records. Preserve stock balance/movement consistency through `InventoryService.applyMovement`; don't edit `so_luong_ton` directly elsewhere.
+- Build UI changes on the Swing EDT. Route blocking database work through `UiTask`; its completion callbacks update Swing components on the EDT.
+- Configuration is working-directory-relative `config.properties` (or `-Dcafe.config=...`); default DB is file H2 under `./data`. Do not include local config/data/log files in changes. `mvn test` and `mvn package` are the intended Maven commands; inspect current tools and reports before claiming execution.
+- Run targeted existing regression tests for changed rules and relevant broader tests when available. Do not add tests unless asked. Never run destructive integration checks against configured/user data.
+- In completion reports, name changed files, commands and observed results, limitations, and material risks. Keep changes scoped to the request.
